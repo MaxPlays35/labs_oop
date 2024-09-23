@@ -18,3 +18,4 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_subdirectory(lab_01)
+add_subdirectory(lab_02)
