@@ -5,11 +5,11 @@
 #include "task.h"
 
 namespace decimal {
-    Decimal::Decimal(): size_(0), number_(nullptr) {
+    Decimal::Decimal(): number_(nullptr), size_(0) {
         // pass
     }
 
-    Decimal::Decimal(size_t n) {
+    Decimal::Decimal(const size_t n) {
         size_ = n;
         number_ = new unsigned char[n + 1];
         number_[n] = '\0';
@@ -18,22 +18,6 @@ namespace decimal {
     Decimal::Decimal(size_t n, unsigned char * t) {
         size_ = n;
         number_ = t;
-    }
-
-    unsigned char * Decimal::LeftPad(const unsigned char * old_str, const size_t & current_size,
-                                     const size_t & new_size) {
-        auto * new_str = new unsigned char[new_size + 1];
-        new_str[new_size] = '\0';
-
-        for (size_t i = 0; i < current_size; ++i) {
-            new_str[i] = old_str[i];
-        }
-
-        for (size_t i = current_size; i < new_size; ++i) {
-            new_str[i] = '0';
-        }
-
-        return new_str;
     }
 
     Decimal::Decimal(const size_t n, const unsigned char t): Decimal(n) {
@@ -56,6 +40,12 @@ namespace decimal {
         }
     }
 
+    Decimal::Decimal(const Decimal &other): Decimal(other.size_) {
+        for (size_t i = 0; i < size_; ++i) {
+            number_[i] = other.number_[i];
+        }
+    }
+
     Decimal::~Decimal() noexcept {
         delete [] number_;
         size_ = 0;
@@ -68,17 +58,19 @@ namespace decimal {
         int buffer = 0;
 
         for (size_t i = 0; i < shared_length; ++i) {
-            buffer += get_decimal_(first_aligned[i]) + get_decimal_(second_aligned[i]);
-            first_aligned[i] = get_char_(buffer % 10);
+            buffer += get_decimal(first_aligned[i]) + get_decimal(second_aligned[i]);
+            first_aligned[i] = get_char(buffer % 10);
             buffer /= 10;
         }
 
         delete [] second_aligned;
+        second_aligned = nullptr;
 
         if (buffer != 0) {
             auto * new_str = LeftPad(first_aligned, shared_length, shared_length + 1);
             delete [] first_aligned;
-            new_str[shared_length] = get_char_(buffer);
+            first_aligned = nullptr;
+            new_str[shared_length] = get_char(buffer);
 
             return Decimal(shared_length + 1, new_str);
         }
@@ -86,11 +78,81 @@ namespace decimal {
         return Decimal(shared_length, first_aligned);
     }
 
-    int Decimal::get_decimal_(const unsigned char & t) {
+    bool Decimal::operator==(const Decimal &other) const {
+        if (size_ != other.size_) {
+            return false;
+        }
+
+        for(size_t i = 0; i < size_; ++i) {
+            if (number_[i] != other.number_[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool Decimal::operator!=(const Decimal &other) const {
+        return *this == other;
+    }
+
+    bool Decimal::operator>(const Decimal &other) const {
+        if (size_ > other.size_) {
+            return true;
+        }
+
+        if (size_ < other.size_) {
+            return false;
+        }
+
+        for(size_t i = 0; i < size_; ++i) {
+            if (number_[i] < other.number_[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool Decimal::operator<(const Decimal &other) const {
+        if (size_ < other.size_) {
+            return true;
+        }
+
+        if (size_ > other.size_) {
+            return false;
+        }
+
+        for(size_t i = 0; i < size_; ++i) {
+            if (number_[i] > other.number_[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    unsigned char * LeftPad(const unsigned char * old_str, const size_t & current_size,
+                                 const size_t & new_size) {
+        auto * new_str = new unsigned char[new_size + 1];
+        new_str[new_size] = '\0';
+
+        for (size_t i = 0; i < current_size; ++i) {
+            new_str[i] = old_str[i];
+        }
+
+        for (size_t i = current_size; i < new_size; ++i) {
+            new_str[i] = '0';
+        }
+
+        return new_str;
+    }
+
+    int get_decimal(const unsigned char & t) {
         return t - '0';
     }
 
-    unsigned char Decimal::get_char_(const int & t) {
+    unsigned char get_char(const int & t) {
         return '0' + t;
     }
 }

@@ -22,7 +22,7 @@ namespace decimal {
 
         Decimal(Decimal && other) noexcept;
 
-        virtual ~Decimal() noexcept;
+        ~Decimal() noexcept;
 
         Decimal operator+(const Decimal & other);
 
@@ -34,9 +34,13 @@ namespace decimal {
 
         bool operator==(const Decimal & other) const;
 
+        bool operator!=(const Decimal & other) const;
+
         bool operator>(const Decimal & other) const;
 
         bool operator<(const Decimal & other) const;
+
+        Decimal & operator=(const Decimal & other) const;
 
     private:
         unsigned char * number_;
@@ -45,13 +49,13 @@ namespace decimal {
         Decimal(size_t n);
 
         Decimal(size_t n, unsigned char * t);
-
-        unsigned char * LeftPad(const unsigned char * old_str, const size_t & current_size, const size_t & new_size);
-
-        static int get_decimal_(const unsigned char & t);
-
-        static unsigned char get_char_(const int & t);
     };
+
+    unsigned char * LeftPad(const unsigned char * old_str, const size_t & current_size, const size_t & new_size);
+
+    int get_decimal(const unsigned char & t);
+
+    unsigned char get_char(const int & t);
 }
 
 #endif //TASK_H
