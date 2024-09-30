@@ -9,10 +9,12 @@
 
 int main() {
 
-    auto test = decimal::Decimal(std::string{"55555"});
-    auto test2 = decimal::Decimal(std::string{"55555"});
+    auto test = decimal::Decimal(std::string{"1000"});
+    auto test2 = decimal::Decimal(std::string{"9"});
 
     test + test2;
+    test - test2;
+    test > test2;
 
     return 0;
 }

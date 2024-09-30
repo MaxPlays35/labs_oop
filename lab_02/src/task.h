@@ -12,11 +12,9 @@ namespace decimal {
     public:
         Decimal();
 
-        Decimal(const size_t n, const unsigned char t);
-
         Decimal(const std::initializer_list<unsigned char> & t);
 
-        Decimal(const std::string & s);
+        explicit Decimal(const std::string & s);
 
         Decimal(const Decimal & other);
 
@@ -24,9 +22,9 @@ namespace decimal {
 
         ~Decimal() noexcept;
 
-        Decimal operator+(const Decimal & other);
+        Decimal operator+(const Decimal & other) const;
 
-        Decimal operator-(const Decimal & other);
+        Decimal operator-(const Decimal & other) const;
 
         Decimal &operator+=(const Decimal & other);
 
@@ -40,18 +38,18 @@ namespace decimal {
 
         bool operator<(const Decimal & other) const;
 
-        Decimal & operator=(const Decimal & other) const;
+        Decimal & operator=(const Decimal & other);
 
     private:
         unsigned char * number_;
         size_t size_;
 
-        Decimal(size_t n);
+        explicit Decimal(size_t n);
 
-        Decimal(size_t n, unsigned char * t);
+        Decimal(const std::string & s, size_t n);
     };
 
-    unsigned char * LeftPad(const unsigned char * old_str, const size_t & current_size, const size_t & new_size);
+    std::string LeftPad(const unsigned char * old_str, const size_t & current_size, const size_t & new_size);
 
     int get_decimal(const unsigned char & t);
 

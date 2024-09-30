@@ -15,14 +15,13 @@ namespace decimal {
         number_[n] = '\0';
     }
 
-    Decimal::Decimal(size_t n, unsigned char * t) {
+    Decimal::Decimal(const std::string &s, size_t n) {
         size_ = n;
-        number_ = t;
-    }
+        number_ = new unsigned char[n + 1];
+        number_[n] = '\0';
 
-    Decimal::Decimal(const size_t n, const unsigned char t): Decimal(n) {
         for (size_t i = 0; i < n; ++i) {
-            number_[n - i - 1] = t;
+            number_[i] = s[i];
         }
     }
 
@@ -51,10 +50,10 @@ namespace decimal {
         size_ = 0;
     }
 
-    Decimal Decimal::operator+(const Decimal & other) {
+    Decimal Decimal::operator+(const Decimal & other) const {
         size_t shared_length = std::max(size_, other.size_);
-        auto * first_aligned = LeftPad(number_, size_, shared_length);
-        auto * second_aligned = LeftPad(other.number_, other.size_, shared_length);
+        auto first_aligned = LeftPad(number_, size_, shared_length);
+        auto second_aligned = LeftPad(other.number_, other.size_, shared_length);
         int buffer = 0;
 
         for (size_t i = 0; i < shared_length; ++i) {
@@ -63,19 +62,46 @@ namespace decimal {
             buffer /= 10;
         }
 
-        delete [] second_aligned;
-        second_aligned = nullptr;
-
         if (buffer != 0) {
-            auto * new_str = LeftPad(first_aligned, shared_length, shared_length + 1);
-            delete [] first_aligned;
-            first_aligned = nullptr;
-            new_str[shared_length] = get_char(buffer);
-
-            return Decimal(shared_length + 1, new_str);
+            first_aligned.push_back(get_char(buffer));
         }
 
-        return Decimal(shared_length, first_aligned);
+        return Decimal(first_aligned);
+    }
+
+    Decimal Decimal::operator-(const Decimal &other) const {
+        if (*this < other) {
+            throw std::out_of_range("Decimal::operator-");
+        }
+
+        auto first_copy = LeftPad(number_, size_, size_);
+        auto second_copy = LeftPad(other.number_, other.size_, size_);
+        bool borrow = false;
+
+        for (size_t i = 0; i < size_; ++i) {
+            int left_digit = get_decimal(first_copy[i]);
+            int right_digit = get_decimal(second_copy[i]);
+
+            if (borrow) {
+                --left_digit;
+                borrow = false;
+            }
+
+            if (left_digit < right_digit) {
+                left_digit += 10;
+                borrow = true;
+            }
+
+            first_copy[i] = get_char(left_digit - right_digit);
+        }
+
+        size_t non_zero_count = size_;
+        while (non_zero_count > 1 && first_copy[non_zero_count - 1] == '0') {
+            --non_zero_count;
+        }
+
+
+        return Decimal(first_copy, non_zero_count);
     }
 
     bool Decimal::operator==(const Decimal &other) const {
@@ -93,56 +119,47 @@ namespace decimal {
     }
 
     bool Decimal::operator!=(const Decimal &other) const {
-        return *this == other;
+        return !(*this == other);
     }
 
     bool Decimal::operator>(const Decimal &other) const {
-        if (size_ > other.size_) {
-            return true;
-        }
-
-        if (size_ < other.size_) {
-            return false;
+        if (size_ != other.size_) {
+            return size_ > other.size_;
         }
 
         for(size_t i = 0; i < size_; ++i) {
-            if (number_[i] < other.number_[i]) {
-                return false;
+            if (number_[i] == other.number_[i]) {
+                continue;
             }
+
+            return number_[i] > other.number_[i];
         }
 
-        return true;
+        return false;
     }
 
     bool Decimal::operator<(const Decimal &other) const {
-        if (size_ < other.size_) {
-            return true;
-        }
-
-        if (size_ > other.size_) {
-            return false;
+        if (size_ != other.size_) {
+            return size_ < other.size_;
         }
 
         for(size_t i = 0; i < size_; ++i) {
-            if (number_[i] > other.number_[i]) {
-                return false;
+            if (number_[i] == other.number_[i]) {
+                continue;
             }
+
+            return number_[i] < other.number_[i];
         }
 
-        return true;
+        return false;
     }
 
-    unsigned char * LeftPad(const unsigned char * old_str, const size_t & current_size,
+    std::string LeftPad(const unsigned char * old_str, const size_t & current_size,
                                  const size_t & new_size) {
-        auto * new_str = new unsigned char[new_size + 1];
-        new_str[new_size] = '\0';
+        std::string new_str(new_size, '0');
 
         for (size_t i = 0; i < current_size; ++i) {
             new_str[i] = old_str[i];
-        }
-
-        for (size_t i = current_size; i < new_size; ++i) {
-            new_str[i] = '0';
         }
 
         return new_str;
