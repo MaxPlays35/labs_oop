@@ -38,7 +38,7 @@ namespace decimal {
 
         bool operator<(const Decimal & other) const;
 
-        Decimal & operator=(Decimal && other) noexcept ;
+        Decimal & operator=(Decimal && other) noexcept;
 
         Decimal & operator=(const Decimal & other);
 

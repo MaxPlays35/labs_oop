@@ -68,9 +68,10 @@ namespace decimal {
 
         if (buffer != 0) {
             first_aligned.push_back(get_char(buffer));
+            ++shared_length;
         }
 
-        return Decimal(first_aligned);
+        return Decimal(first_aligned, shared_length);
     }
 
     Decimal Decimal::operator-(const Decimal &other) const {
@@ -106,6 +107,20 @@ namespace decimal {
 
 
         return Decimal(first_copy, non_zero_count);
+    }
+
+    Decimal & Decimal::operator+=(const Decimal &other) {
+        auto result = *this + other;
+        swap(*this, result);
+
+        return *this;
+    }
+
+    Decimal & Decimal::operator-=(const Decimal &other) {
+        auto result = *this - other;
+        swap(*this, result);
+
+        return *this;
     }
 
     bool Decimal::operator==(const Decimal &other) const {
