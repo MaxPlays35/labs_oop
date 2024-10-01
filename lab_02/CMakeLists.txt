@@ -4,7 +4,7 @@ project(lab_02)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(${PROJECT_NAME}_lib src/task.cpp)
+add_library(${PROJECT_NAME}_lib src/task.h src/task.cpp)
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)

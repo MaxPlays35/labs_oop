@@ -4,6 +4,27 @@
 
 #include "task.h"
 
+namespace {
+    std::string LeftPad(const unsigned char * old_str, const size_t & current_size,
+                    const size_t & new_size) {
+        std::string new_str(new_size, '0');
+
+        for (size_t i = 0; i < current_size; ++i) {
+            new_str[i] = old_str[i];
+        }
+
+        return new_str;
+    }
+
+    int get_decimal(const unsigned char & t) {
+        return t - '0';
+    }
+
+    unsigned char get_char(const int & t) {
+        return '0' + t;
+    }
+}
+
 namespace decimal {
     Decimal::Decimal(): number_(nullptr), size_(0) {
         // pass
@@ -180,28 +201,19 @@ namespace decimal {
         return *this;
     }
 
+    std::string Decimal::to_string() const {
+        std::string str(size_, '0');
+
+        for (size_t i = size_; i > 0; --i) {
+            str[size_ - i] = number_[i - 1];
+        }
+
+        return str;
+    }
+
     Decimal & Decimal::operator=(Decimal &&other)  noexcept {
         swap(*this, other);
         return *this;
-    }
-
-    std::string LeftPad(const unsigned char * old_str, const size_t & current_size,
-                        const size_t & new_size) {
-        std::string new_str(new_size, '0');
-
-        for (size_t i = 0; i < current_size; ++i) {
-            new_str[i] = old_str[i];
-        }
-
-        return new_str;
-    }
-
-    int get_decimal(const unsigned char & t) {
-        return t - '0';
-    }
-
-    unsigned char get_char(const int & t) {
-        return '0' + t;
     }
 
     void Decimal::swap(Decimal & a, Decimal & b) noexcept {

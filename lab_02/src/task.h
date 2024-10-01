@@ -42,6 +42,7 @@ namespace decimal {
 
         Decimal & operator=(const Decimal & other);
 
+        std::string to_string() const;
 
     private:
         unsigned char * number_;
@@ -53,12 +54,6 @@ namespace decimal {
 
         static void swap(Decimal & a, Decimal & b) noexcept;
     };
-
-    std::string LeftPad(const unsigned char * old_str, const size_t & current_size, const size_t & new_size);
-
-    int get_decimal(const unsigned char & t);
-
-    unsigned char get_char(const int & t);
 }
 
 #endif //TASK_H
