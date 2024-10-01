@@ -45,6 +45,10 @@ namespace decimal {
         }
     }
 
+    Decimal::Decimal(Decimal &&other) noexcept {
+
+    }
+
     Decimal::~Decimal() noexcept {
         delete [] number_;
         size_ = 0;
@@ -154,8 +158,20 @@ namespace decimal {
         return false;
     }
 
+    Decimal & Decimal::operator=(const Decimal & other) {
+        auto copy = Decimal(other);
+        swap(*this, copy);
+
+        return *this;
+    }
+
+    Decimal & Decimal::operator=(Decimal &&other)  noexcept {
+        swap(*this, other);
+        return *this;
+    }
+
     std::string LeftPad(const unsigned char * old_str, const size_t & current_size,
-                                 const size_t & new_size) {
+                        const size_t & new_size) {
         std::string new_str(new_size, '0');
 
         for (size_t i = 0; i < current_size; ++i) {
@@ -171,5 +187,13 @@ namespace decimal {
 
     unsigned char get_char(const int & t) {
         return '0' + t;
+    }
+
+    void Decimal::swap(Decimal & a, Decimal & b) noexcept {
+        a.number_ = b.number_;
+        a.size_ = b.size_;
+
+        b.size_ = 0;
+        b.number_ = nullptr;
     }
 }

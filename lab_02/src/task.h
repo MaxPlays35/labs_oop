@@ -38,7 +38,10 @@ namespace decimal {
 
         bool operator<(const Decimal & other) const;
 
+        Decimal & operator=(Decimal && other) noexcept ;
+
         Decimal & operator=(const Decimal & other);
+
 
     private:
         unsigned char * number_;
@@ -47,6 +50,8 @@ namespace decimal {
         explicit Decimal(size_t n);
 
         Decimal(const std::string & s, size_t n);
+
+        static void swap(Decimal & a, Decimal & b) noexcept;
     };
 
     std::string LeftPad(const unsigned char * old_str, const size_t & current_size, const size_t & new_size);
