@@ -5,8 +5,8 @@
 #include "task.h"
 
 namespace {
-    std::string LeftPad(const unsigned char * old_str, const size_t & current_size,
-                    const size_t & new_size) {
+    std::string LeftPad(const unsigned char *old_str, const size_t &current_size,
+                        const size_t &new_size) {
         std::string new_str(new_size, '0');
 
         for (size_t i = 0; i < current_size; ++i) {
@@ -16,12 +16,16 @@ namespace {
         return new_str;
     }
 
-    int get_decimal(const unsigned char & t) {
+    int get_decimal(const unsigned char &t) {
         return t - '0';
     }
 
-    unsigned char get_char(const int & t) {
+    unsigned char get_char(const int &t) {
         return '0' + t;
+    }
+
+    bool is_decimal_digit(const unsigned char &t) {
+        return t >= '0' && t <= '9';
     }
 }
 
@@ -42,20 +46,32 @@ namespace decimal {
         number_[n] = '\0';
 
         for (size_t i = 0; i < n; ++i) {
+            if (!is_decimal_digit(s[i])) {
+                throw std::invalid_argument("Invalid Decimal Number");
+            }
+
             number_[i] = s[i];
         }
     }
 
-    Decimal::Decimal(const std::initializer_list<unsigned char> & t): Decimal(t.size()) {
+    Decimal::Decimal(const std::initializer_list<unsigned char> &t): Decimal(t.size()) {
         size_t i{0};
-        for (const auto & e: t) {
+        for (const auto &e: t) {
+            if (!is_decimal_digit(e)) {
+                throw std::invalid_argument("Invalid Decimal Number");
+            }
+
             number_[size_ - i - 1] = e;
             ++i;
         }
     }
 
-    Decimal::Decimal(const std::string & s): Decimal(s.size()) {
+    Decimal::Decimal(const std::string &s): Decimal(s.size()) {
         for (size_t i = 0; i < s.size(); ++i) {
+            if (!is_decimal_digit(s[i])) {
+                throw std::invalid_argument("Invalid Decimal Number");
+            }
+
             number_[size_ - i - 1] = s[i];
         }
     }
@@ -67,7 +83,7 @@ namespace decimal {
     }
 
     Decimal::Decimal(Decimal &&other) noexcept {
-
+        swap(*this, other);
     }
 
     Decimal::~Decimal() noexcept {
@@ -75,7 +91,7 @@ namespace decimal {
         size_ = 0;
     }
 
-    Decimal Decimal::operator+(const Decimal & other) const {
+    Decimal Decimal::operator+(const Decimal &other) const {
         size_t shared_length = std::max(size_, other.size_);
         auto first_aligned = LeftPad(number_, size_, shared_length);
         auto second_aligned = LeftPad(other.number_, other.size_, shared_length);
@@ -130,14 +146,14 @@ namespace decimal {
         return Decimal(first_copy, non_zero_count);
     }
 
-    Decimal & Decimal::operator+=(const Decimal &other) {
+    Decimal &Decimal::operator+=(const Decimal &other) {
         auto result = *this + other;
         swap(*this, result);
 
         return *this;
     }
 
-    Decimal & Decimal::operator-=(const Decimal &other) {
+    Decimal &Decimal::operator-=(const Decimal &other) {
         auto result = *this - other;
         swap(*this, result);
 
@@ -149,7 +165,7 @@ namespace decimal {
             return false;
         }
 
-        for(size_t i = 0; i < size_; ++i) {
+        for (size_t i = 0; i < size_; ++i) {
             if (number_[i] != other.number_[i]) {
                 return false;
             }
@@ -167,7 +183,7 @@ namespace decimal {
             return size_ > other.size_;
         }
 
-        for(size_t i = 0; i < size_; ++i) {
+        for (size_t i = 0; i < size_; ++i) {
             if (number_[i] == other.number_[i]) {
                 continue;
             }
@@ -183,7 +199,7 @@ namespace decimal {
             return size_ < other.size_;
         }
 
-        for(size_t i = 0; i < size_; ++i) {
+        for (size_t i = 0; i < size_; ++i) {
             if (number_[i] == other.number_[i]) {
                 continue;
             }
@@ -194,7 +210,7 @@ namespace decimal {
         return false;
     }
 
-    Decimal & Decimal::operator=(const Decimal & other) {
+    Decimal &Decimal::operator=(const Decimal &other) {
         auto copy = Decimal(other);
         swap(*this, copy);
 
@@ -211,12 +227,12 @@ namespace decimal {
         return str;
     }
 
-    Decimal & Decimal::operator=(Decimal &&other)  noexcept {
+    Decimal &Decimal::operator=(Decimal &&other) noexcept {
         swap(*this, other);
         return *this;
     }
 
-    void Decimal::swap(Decimal & a, Decimal & b) noexcept {
+    void Decimal::swap(Decimal &a, Decimal &b) noexcept {
         a.number_ = b.number_;
         a.size_ = b.size_;
 

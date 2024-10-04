@@ -175,6 +175,18 @@ TEST(SET_AND_SUB_TESTS, TEST2) {
                  }, std::out_of_range);
 }
 
+TEST(WRONG_NUMBER_TESTS, TEST1) {
+    EXPECT_THROW({
+        auto first = decimal::Decimal{"0@#"};
+    }, std::invalid_argument);
+}
+
+TEST(WRONG_NUMBER_TESTS, TEST2) {
+    EXPECT_THROW({
+        auto first = decimal::Decimal{"!987"};
+    }, std::invalid_argument);
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
