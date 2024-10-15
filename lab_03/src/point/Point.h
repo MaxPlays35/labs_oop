@@ -6,15 +6,14 @@
 #define POINT_H
 #include <iostream>
 #include <istream>
+#include <cmath>
 
 namespace Shape {
     class Point {
     public:
         double x, y;
 
-        bool operator==(const Point & other) const {
-            return x == other.x && y == other.y;
-        }
+        bool operator==(const Point & other) const;
 
         friend std::istream &operator>>(std::istream & is, Point & point) {
             std::cout << "Enter x and y of the point: ";
@@ -28,6 +27,8 @@ namespace Shape {
             return os;
         }
     };
+
+    double distance(const Point & a, const Point & b);
 }
 
 #endif //POINT_H

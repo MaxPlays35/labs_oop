@@ -68,6 +68,13 @@ namespace Shape {
     }
 
     std::istream & operator>>(std::istream & is, Figure & figure) {
+        int quantity;
+
+        std::cout << "Enter a quantity of points for this shape: ";
+        is >> quantity;
+
+        figure.points = std::vector<Point>(quantity);
+
         for (auto & point : figure.points) {
             is >> point;
         }
