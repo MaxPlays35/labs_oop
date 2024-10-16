@@ -58,10 +58,31 @@ namespace Shape {
     }
 
     std::ostream & operator<<(std::ostream & os, const Figure & figure) {
-        os << "Shape(";
-        for (auto & point : figure.points) {
-            os << point << ',';
+        switch (figure.points.size()) {
+            case 3:
+                os << "Triangle(";
+                break;
+            case 6:
+                os << "Hexagon(";
+                break;
+            case 8:
+                os << "Octagon(";
+                break;
+            default:
+                os << "Shape(";
+                break;
         }
+
+        size_t size = figure.points.size();
+
+        for (size_t i = 0; i < size; ++i) {
+            os << figure.points[i] ;
+
+            if (i != size - 1) {
+                os << ',';
+            }
+        }
+
         os << ')';
 
         return os;

@@ -43,20 +43,6 @@ namespace Shape {
         return std::sqrt(3) * distance(points[0], points[1]) / 4;
     }
 
-    std::ostream & operator<<(std::ostream & os, const Triangle & figure) {
-        os << "Triangle(";
-        for (size_t i = 0; i < 3; ++i) {
-            os << figure.points[i];
-
-            if (i != 2) {
-                os << ',';
-            }
-        }
-        os << ')';
-
-        return os;
-    }
-
     std::istream & operator>>(std::istream & is, Triangle & figure) {
         Point center;
         double length;

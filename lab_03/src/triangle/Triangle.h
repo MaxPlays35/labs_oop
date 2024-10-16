@@ -23,8 +23,6 @@ namespace Shape {
 
         Triangle &operator=(Triangle && other) noexcept;
 
-        friend std::ostream &operator<<(std::ostream & os, const Triangle & figure);
-
         friend std::istream &operator>>(std::istream & is, Triangle & figure);
 
         explicit operator double() const override;

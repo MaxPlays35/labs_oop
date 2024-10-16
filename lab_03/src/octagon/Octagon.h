@@ -23,8 +23,6 @@ namespace Shape {
 
         Octagon &operator=(Octagon && other) noexcept;
 
-        friend std::ostream &operator<<(std::ostream & os, const Octagon & figure);
-
         friend std::istream &operator>>(std::istream & is, Octagon & figure);
 
         explicit operator double() const override;

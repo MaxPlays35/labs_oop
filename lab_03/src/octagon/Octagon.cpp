@@ -12,14 +12,14 @@ namespace Shape {
 
     Octagon::Octagon(Point center, double length) {
         points = std::vector<Point>{
-            Point{center.x - 0.5 * length, center.y - std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x + 0.5 * length, center.y - std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x - 0.5 * length, center.y + std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x + 0.5 * length, center.y + std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x - std::tan(std::numbers::pi / 8) * 0.5 * length, center.y - 0.5 * length},
-            Point{center.x - std::tan(std::numbers::pi / 8) * 0.5 * length, center.y + 0.5 * length},
-            Point{center.x + std::tan(std::numbers::pi / 8) * 0.5 * length, center.y - 0.5 * length},
-            Point{center.x + std::tan(std::numbers::pi / 8) * 0.5 * length, center.y + 0.5 * length},
+            Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length},
+            Point{center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length},
+            Point{center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length},
+            Point{center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length},
         };
     }
 
@@ -40,20 +40,6 @@ namespace Shape {
         const double length = distance(points[0], points[1]);
 
         return 2 * length * length * (std::numbers::sqrt2 + 1);
-    }
-
-    std::ostream &operator<<(std::ostream & os, const Octagon & figure) {
-        os << "Octagon(";
-        for (size_t i = 0; i < 8; ++i) {
-            os << figure.points[i];
-
-            if (i != 7) {
-                os << ',';
-            }
-        }
-        os << ')';
-
-        return os;
     }
 
     std::istream &operator>>(std::istream & is, Octagon & figure) {
