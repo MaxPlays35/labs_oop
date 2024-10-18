@@ -10,12 +10,12 @@ namespace Shape {
 
     Hexagon::Hexagon(Point center, double length) {
         points = std::vector<Point>{
-            Point{center.x + 0.5 * length, center.y - (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x - 0.5 * length, center.y - (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x + 0.5 * length, center.y + (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x - 0.5 * length, center.y + (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x + (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length, center.y},
-            Point{center.x - (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length, center.y}
+            Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y},
+            Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
         };
     }
 
@@ -33,6 +33,12 @@ namespace Shape {
         return *this;
     }
 
+    Hexagon::operator double() const {
+        const double length = distance(points[0], points[1]);
+
+        return 3 * std::numbers::sqrt3 * length * length / 2;
+    }
+
     std::istream & operator>>(std::istream & is, Hexagon & figure) {
         Point center;
         double length;
@@ -44,12 +50,12 @@ namespace Shape {
         is >> center;
 
         figure.points = std::vector<Point>{
-            Point{center.x + 0.5 * length, center.y - (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x - 0.5 * length, center.y - (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x + 0.5 * length, center.y + (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x - 0.5 * length, center.y + (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-            Point{center.x + (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length, center.y},
-            Point{center.x - (1 / std::tan(std::numbers::pi / 6)) * 0.5 * length, center.y}
+            Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
+            Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y},
+            Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
         };
 
         return is;

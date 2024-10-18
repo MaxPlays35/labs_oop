@@ -26,6 +26,13 @@ namespace Shape {
         return *this;
     }
 
+    Point Figure::operator[](const size_t index) const {
+        if (index >= points.size()) {
+            throw std::out_of_range("Out of range! Check index");
+        }
+        return points[index];
+    }
+
     bool Figure::operator==(const Figure & other) const {
         if (points.size() != other.points.size()) {
             return false;

@@ -9,6 +9,7 @@
 
 namespace Shape {
     class Octagon : public Figure {
+    public:
         Octagon() = default;
 
         Octagon(Point a, Point b, Point c, Point d, Point e, Point f, Point g, Point h);

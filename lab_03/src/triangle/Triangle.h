@@ -9,6 +9,7 @@
 
 namespace Shape {
     class Triangle : public Figure {
+    public:
         Triangle() = default;
 
         Triangle(Point a, Point b, Point c);

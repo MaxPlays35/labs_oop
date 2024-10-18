@@ -11,11 +11,11 @@ namespace Shape {
     Triangle::Triangle(Point center, double length) {
         points = std::vector<Point>{
             Point{
-                center.x + std::cos(std::numbers::pi / 3.0),
+                center.x + std::cos(std::numbers::pi / 3.0) * length,
                 center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
             },
             Point{
-                center.x - std::cos(std::numbers::pi / 3.0),
+                center.x - std::cos(std::numbers::pi / 3.0) * length,
                 center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
             },
             Point{
@@ -40,26 +40,28 @@ namespace Shape {
     }
 
     Triangle::operator double() const {
-        return std::sqrt(3) * distance(points[0], points[1]) / 4;
+       const double length = distance(points[0], points[1]);
+
+        return std::numbers::sqrt3 * length * length / 4;
     }
 
     std::istream & operator>>(std::istream & is, Triangle & figure) {
         Point center;
         double length;
 
-        std::cout << "Enter a length for side of Triangle" << std::endl;
+        std::cout << "Enter a length for side of Triangle:";
         is >> length;
 
-        std::cout << "Enter a center for Triangle" << std::endl;
+        std::cout << "Enter a center for Triangle:";
         is >> center;
 
         figure.points = std::vector<Point>{
             Point{
-                center.x + std::cos(std::numbers::pi / 3.0),
+                center.x + std::cos(std::numbers::pi / 3.0) * length,
                 center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
             },
             Point{
-                center.x - std::cos(std::numbers::pi / 3.0),
+                center.x - std::cos(std::numbers::pi / 3.0) * length,
                 center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
             },
             Point{

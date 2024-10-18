@@ -9,6 +9,8 @@
 #include <cmath>
 
 namespace Shape {
+    const double kEps = 1e-10;
+
     class Point {
     public:
         double x, y;
@@ -16,7 +18,7 @@ namespace Shape {
         bool operator==(const Point & other) const;
 
         friend std::istream &operator>>(std::istream & is, Point & point) {
-            std::cout << "Enter x and y of the point: ";
+            std::cout << "Enter x and y of the point(separated by space):";
             is >> point.x >> point.y;
             return is;
         }

@@ -53,14 +53,14 @@ namespace Shape {
         is >> center;
 
         figure.points = std::vector<Point>{
-            Point{center.x - 0.5 * length, center.y - std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x + 0.5 * length, center.y - std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x - 0.5 * length, center.y + std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x + 0.5 * length, center.y + std::tan(std::numbers::pi / 8) * 0.5 * length},
-            Point{center.x - std::tan(std::numbers::pi / 8) * 0.5 * length, center.y - 0.5 * length},
-            Point{center.x - std::tan(std::numbers::pi / 8) * 0.5 * length, center.y + 0.5 * length},
-            Point{center.x + std::tan(std::numbers::pi / 8) * 0.5 * length, center.y - 0.5 * length},
-            Point{center.x + std::tan(std::numbers::pi / 8) * 0.5 * length, center.y + 0.5 * length},
+            Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
+            Point{center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length},
+            Point{center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length},
+            Point{center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length},
+            Point{center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length},
         };
 
         return is;

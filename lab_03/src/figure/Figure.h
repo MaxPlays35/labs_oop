@@ -31,6 +31,8 @@ namespace Shape {
 
         friend std::istream &operator>>(std::istream & is, Figure & figure);
 
+        Point operator[](size_t index) const;
+
         virtual bool operator==(const Figure & other) const;
 
         virtual Point get_center();

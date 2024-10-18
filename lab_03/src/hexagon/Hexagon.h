@@ -8,6 +8,7 @@
 
 namespace Shape {
     class Hexagon : public Figure {
+    public:
         Hexagon() = default;
 
         Hexagon(Point a, Point b, Point c, Point d, Point e, Point f);
