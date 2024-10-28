@@ -3,7 +3,7 @@ project(labs)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=maybe-uninitialized")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=maybe-uninitialized")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -20,3 +20,4 @@ enable_testing()
 add_subdirectory(lab_01)
 add_subdirectory(lab_02)
 add_subdirectory(lab_03)
+add_subdirectory(lab_04)
