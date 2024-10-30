@@ -11,14 +11,45 @@ namespace Shape {
     public:
         Hexagon() = default;
 
-        Hexagon(Point<T> a, Point<T> b, Point<T> c, Point<T> d, Point<T> e, Point<T> f): Figure<T>{a, b, c, d, e, f} {}
+        Hexagon(Point<T> a, Point<T> b, Point<T> c, Point<T> d, Point<T> e, Point<T> f): Figure<T>{a, b, c, d, e, f} {
+        }
 
         Hexagon(Point<T> center, double length) {
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                )
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
 
+                )
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                )
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                )
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+
+                )
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+                )
+            );
         }
 
         Hexagon(const Hexagon & figure) : Figure<T>(figure) {
-
         }
 
         Hexagon(Hexagon && figure) noexcept {
@@ -49,20 +80,44 @@ namespace Shape {
             std::cout << "Enter a center for Hexagon" << std::endl;
             is >> center;
 
-            figure.points = std::vector<Point<double>>{
-                Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-                Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-                Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-                Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length},
-                Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y},
-                Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
-            };
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                )
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+
+                )
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                )
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                )
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+
+                )
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(
+                    Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+                )
+            );
 
             return is;
         }
 
         explicit operator double() const override {
-            const double length = distance(Figure<T>::points[0], Figure<T>::points[1]);
+            const double length = distance(*Figure<T>::points[0], *Figure<T>::points[1]);
 
             return 3 * std::numbers::sqrt3 * length * length / 2;
         }

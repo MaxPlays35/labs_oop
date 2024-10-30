@@ -17,11 +17,49 @@ namespace Shape {
         }
 
         Octagon(Point<T> center, double length) {
-
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length
+                })
+            );
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length
+                })
+            );
         }
 
         Octagon(const Octagon & figure) : Figure<T>(figure) {
-
         }
 
         Octagon(Octagon && figure) noexcept {
@@ -44,7 +82,7 @@ namespace Shape {
 
         friend std::istream &operator>>(std::istream & is, Octagon & figure) {
             Point<T> center;
-            double length;
+            T length;
 
             std::cout << "Enter a length for side of Octagon" << std::endl;
             is >> length;
@@ -52,22 +90,52 @@ namespace Shape {
             std::cout << "Enter a center for Octagon" << std::endl;
             is >> center;
 
-            figure.points = std::vector<Point<T>>{
-                Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
-                Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
-                Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
-                Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length},
-                Point{center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length},
-                Point{center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length},
-                Point{center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length},
-                Point{center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length},
-            };
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x - (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y - 0.5 * length
+                })
+            );
+            figure.points.emplace_back(
+                std::make_unique<Point<T> >(Point{
+                    center.x + (1.0 / std::tan(std::numbers::pi / 8)) * 0.5 * length, center.y + 0.5 * length
+                })
+            );
 
             return is;
         }
 
         explicit operator double() const override {
-            const double length = distance(Figure<T>::points[0], Figure<T>::points[1]);
+            const double length = distance(*Figure<T>::points[0], *Figure<T>::points[1]);
 
             return 2 * length * length * (std::numbers::sqrt2 + 1);
         }

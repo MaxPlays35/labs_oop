@@ -99,7 +99,7 @@ namespace Shape {
                 throw std::out_of_range("Out of range! Check index");
             }
 
-            return points[index];
+            return *points[index];
         }
 
         virtual bool operator==(const Figure & other) const {

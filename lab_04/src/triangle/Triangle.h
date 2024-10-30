@@ -15,20 +15,21 @@ namespace Shape {
         Triangle(Point<T> a, Point<T> b, Point<T> c) : Figure<T>{a, b, c} {}
 
         Triangle(Point<T> center, double length) {
-            Figure<T>::points = std::vector<Point<double>>{
-                Point{
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T>>(Point<double>{
                     center.x + std::cos(std::numbers::pi / 3.0) * length,
                     center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                },
-                Point{
+                }));
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T>>(Point<double>{
                     center.x - std::cos(std::numbers::pi / 3.0) * length,
                     center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                },
-                Point{
+                }));
+            Figure<T>::points.emplace_back(
+                std::make_unique<Point<T>>(Point<double>{
                     center.x,
                     center.y + (2.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }
-            };
+                }));
         }
 
         Triangle(const Triangle & figure) : Figure<T>(figure){}
@@ -50,33 +51,31 @@ namespace Shape {
             return *this;
         }
 
-        // friend std::istream &operator>>(std::istream & is, Triangle & figure) {
-        //     Point<T> center;
-        //     double length;
-        //
-        //     std::cout << "Enter a length for side of Triangle:";
-        //     is >> length;
-        //
-        //     std::cout << "Enter a center for Triangle:";
-        //     is >> center;
-        //
-        //     figure.points = std::vector<Point<double>>{
-        //         Point{
-        //             center.x + std::cos(std::numbers::pi / 3.0) * length,
-        //             center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-        //         },
-        //         Point{
-        //             center.x - std::cos(std::numbers::pi / 3.0) * length,
-        //             center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-        //         },
-        //         Point{
-        //             center.x,
-        //             center.y + (2.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-        //         }
-        //     };
-        //
-        //     return is;
-        // }
+        friend std::istream &operator>>(std::istream & is, Triangle & figure) {
+            Point<T> center;
+            T length;
+
+            std::cout << "Enter a length for side of Triangle:";
+            is >> length;
+
+            std::cout << "Enter a center for Triangle:";
+            is >> center;
+
+            figure.points.emplace_back(std::make_unique<Point<T>>(Point{
+               center.x + std::cos(std::numbers::pi / 3.0) * length,
+               center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+                }));
+            figure.points.emplace_back(std::make_unique<Point<T>>(Point{
+                center.x - std::cos(std::numbers::pi / 3.0) * length,
+                center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+                }));
+            figure.points.emplace_back(std::make_unique<Point<T>>(Point{
+                center.x,
+                center.y + (2.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+                }));
+
+            return is;
+        }
 
         explicit operator double() const override {
             const double length = distance(*Figure<T>::points[0], *Figure<T>::points[1]);

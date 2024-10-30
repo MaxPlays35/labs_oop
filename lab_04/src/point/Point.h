@@ -9,7 +9,7 @@
 #include <memory>
 
 namespace Shape {
-    const double kEps = 1e-10;
+    constexpr double kEps = 1e-10;
 
     template<class T>
     concept Numberic = std::is_scalar_v<T>;
