@@ -3,6 +3,8 @@
 //
 #pragma once
 
+#include <memory>
+
 #include "../memoryResource/MemoryResource.h"
 
 template<class T>
@@ -16,8 +18,8 @@ template<class T, class allocator_type>
 class Queue {
 private:
     struct Node {
-        std::unique_ptr<T, PolymorphicDeleter<T>> data;
-        std::unique_ptr<Node, PolymorphicDeleter<Node> > next;
+        std::unique_ptr<T, PolymorphicDeleter<T>> data = nullptr;
+        std::unique_ptr<Node, PolymorphicDeleter<Node>> next = nullptr;
     };
 
     using smart_ptr_node = std::unique_ptr<Node, PolymorphicDeleter<Node>>;
@@ -36,6 +38,8 @@ public:
                                                         std::pmr::polymorphic_allocator<Node>(&customResource)),
                                                     size_(0), alloc_(allocator) {
         Node *raw = nodeAllocator_.allocate(sizeof(Node));
+        auto test = raw->next.get();
+        nodeAllocator_.deallocate(raw, sizeof(Node));
 
         first_ = smart_ptr_node(raw);
         last_ = smart_ptr_node(raw);
@@ -50,9 +54,8 @@ public:
     Queue(const Queue &other): Queue(other.alloc_) {
         auto temp = smart_ptr_node(other.first_.get());
 
-        while (temp->next != nullptr) {
+        for(size_t i = 0; i < other.size_; ++i) {
             push(*temp->data);
-
             temp = smart_ptr_node(temp->next.get());
         }
     }
@@ -121,12 +124,12 @@ public:
     }
 
     ~Queue() {
-        if (first_ != nullptr) {
-            auto temp = smart_ptr_node(first_.get());
-
-            while (temp->next != nullptr) {
-                temp = smart_ptr_node(temp->next.get());
-            }
-        }
+        // if (first_ != nullptr) {
+        //     auto temp = smart_ptr_node(first_.get());
+        //
+        //     while (temp->next != nullptr) {
+        //         temp = smart_ptr_node(temp->next.get());
+        //     }
+        // }
     }
 };

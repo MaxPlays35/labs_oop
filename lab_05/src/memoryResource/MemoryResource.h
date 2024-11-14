@@ -6,6 +6,7 @@
 
 #include <map>
 #include <memory_resource>
+#include <stdexcept>
 
 class Block {
 public:
