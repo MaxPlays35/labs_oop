@@ -2,6 +2,7 @@
 // Created by Aleksandr Mikhailov on 11.11.2024.
 //
 
+#include <iostream>
 #include <queue>
 #include <vector>
 
@@ -9,24 +10,30 @@
 #include "src/queue/Queue.h"
 
 int main() {
-    CustomMemoryResource customResource;
-    std::pmr::polymorphic_allocator<int> allocator(&customResource);
+    PolymorphicQueue::CustomMemoryResource customResource;
+    std::pmr::polymorphic_allocator<int> allocatorInt(&customResource);
+    std::pmr::polymorphic_allocator<std::pair<int, int> > allocatorPair(&customResource);
 
-    std::pmr::vector<int> vector(allocator);
+    PolymorphicQueue::Queue<int, std::pmr::polymorphic_allocator<int> > queue1(allocatorInt);
 
-    for (int i = 0; i < 100; i++) {
-        vector.push_back(i);
+    for (int i = 0; i < 10; i++) {
+        queue1.push(i);
     }
 
-    Queue<int, std::pmr::polymorphic_allocator<int>> queue(allocator);
-
-    for (int i = 0; i < 2; i++) {
-        queue.push(i);
+    for (const auto & test: queue1) {
+        std::cout << "Queue1: " << test << std::endl;
     }
 
-    Queue<int, std::pmr::polymorphic_allocator<int>> queue2(queue);
+    PolymorphicQueue::Queue<std::pair<int, int>, std::pmr::polymorphic_allocator<std::pair<int, int>>>
+            queue2(allocatorPair);
 
-    auto test = std::move(queue2);
+    for (int i = 0; i < 10; i++) {
+        queue2.push(std::make_pair(i, i + 10));
+    }
+
+    for (const auto & [fst, snd]: queue2) {
+        std::cout << "Queue2: " << fst << ' ' << snd << std::endl;
+    }
 
     return 0;
 }

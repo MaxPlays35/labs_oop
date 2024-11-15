@@ -8,51 +8,65 @@
 #include <memory_resource>
 #include <stdexcept>
 
-class Block {
-public:
-    size_t offset;
-    size_t size;
+namespace PolymorphicQueue {
+    class Block {
+    public:
+        size_t offset;
+        size_t size;
 
-    Block(const size_t offset, const size_t size) : offset(offset), size(size) {}
-};
+        Block() = default;
 
-class CustomMemoryResource : public std::pmr::memory_resource {
-    static constexpr size_t max_size = 1024;
-    char buffer[max_size];
-    std::map<size_t, Block> used_blocks;
-public:
-    void* do_allocate(size_t bytes, size_t alignment) override {
-        size_t prevOffset = 0;
+        Block(const size_t offset, const size_t size) : offset(offset), size(size) {}
 
-        for (const auto& [key, block] : used_blocks) {
-            if (key - prevOffset >= bytes) {
-                break;
+        bool operator==(const Block & other) const {
+            return offset == other.offset && size == other.size;
+        }
+
+        ~Block() = default;
+    };
+
+    class CustomMemoryResource : public std::pmr::memory_resource {
+        static constexpr size_t max_size = 1024;
+        char buffer[max_size];
+        std::map<size_t, Block> used_blocks;
+    public:
+        void* do_allocate(size_t bytes, size_t alignment) override {
+            size_t prevOffset = 0;
+
+            for (const auto& [key, block] : used_blocks) {
+                if (key - prevOffset >= bytes) {
+                    break;
+                }
+
+                prevOffset = key + block.size;
             }
 
-            prevOffset = key + block.size;
-        }
-
-        if (prevOffset + bytes >= max_size) {
-            throw std::bad_alloc();
-        }
-
-        used_blocks.emplace(prevOffset, Block(prevOffset, bytes));
-        return buffer + prevOffset;
-    }
-
-    void do_deallocate(void* ptr, size_t bytes, size_t alignment) override {
-        for(const auto& [key, _] : used_blocks) {
-            if (ptr == buffer + key) {
-                used_blocks.erase(key);
-                return;
+            if (prevOffset + bytes >= max_size) {
+                throw std::bad_alloc();
             }
+
+            used_blocks.emplace(prevOffset, Block(prevOffset, bytes));
+            return buffer + prevOffset;
         }
 
-        throw std::logic_error("Trying to free a block that doesn't exist");
-    }
+        void do_deallocate(void* ptr, size_t bytes, size_t alignment) override {
+            for(const auto& [key, _] : used_blocks) {
+                if (ptr == buffer + key) {
+                    used_blocks.erase(key);
+                    return;
+                }
+            }
 
-    bool do_is_equal(const std::pmr::memory_resource& other) const noexcept override {
-        return this == &other;
-    }
-};
+            throw std::logic_error("Trying to free a block that doesn't exist");
+        }
+
+        bool do_is_equal(const std::pmr::memory_resource& other) const noexcept override {
+            return this == &other;
+        }
+
+        std::map<size_t, Block> get_used_blocks() {
+            return used_blocks;
+        }
+    };
+}
 
