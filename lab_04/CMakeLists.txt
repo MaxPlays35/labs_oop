@@ -10,7 +10,9 @@ add_library(${PROJECT_NAME}_lib
         src/triangle/Triangle.h src/triangle/Triangle.cpp
         src/octagon/Octagon.h src/octagon/Octagon.cpp
         src/hexagon/Hexagon.h src/hexagon/Hexagon.cpp
-        src/array/Array.h src/array/Array.cpp)
+        src/array/Array.h src/array/Array.cpp
+        src/figureOnPoints/FigureOnPoints.h src/figureOnPoints/FigureOnPoints.cpp
+        src/consts/Consts.h)
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)

@@ -3,69 +3,65 @@
 //
 #pragma once
 
-#include "../figure/Figure.h"
+#include "../consts/Consts.h"
+#include "../figureOnPoints/FigureOnPoints.h"
 
 namespace Shape {
     template<Numberic T>
-    class Hexagon : public Figure<T> {
+    class Hexagon : public FigureOnPoints<T, kHexagonPoints> {
     public:
         Hexagon() = default;
 
-        Hexagon(Point<T> a, Point<T> b, Point<T> c, Point<T> d, Point<T> e, Point<T> f): Figure<T>{a, b, c, d, e, f} {
+        Hexagon(Point<T> a, Point<T> b, Point<T> c, Point<T> d, Point<T> e, Point<T> f): FigureOnPoints<T,
+            kHexagonPoints>{a, b, c, d, e, f} {
         }
 
         Hexagon(Point<T> center, double length) {
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
-                )
-            );
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+            FigureOnPoints<T, kHexagonPoints>::points[0] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                    );
+            FigureOnPoints<T, kHexagonPoints>::points[1] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
 
-                )
-            );
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
-                )
-            );
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
-                )
-            );
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+                    );
+            FigureOnPoints<T, kHexagonPoints>::points[2] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                    );
+            FigureOnPoints<T, kHexagonPoints>::points[3] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                    );
+            FigureOnPoints<T, kHexagonPoints>::points[4] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
 
-                )
-            );
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
-                )
-            );
+                    );
+            FigureOnPoints<T, kHexagonPoints>::points[5] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+                    );
         }
 
-        Hexagon(const Hexagon & figure) : Figure<T>(figure) {
+        Hexagon(const Hexagon & figure) : FigureOnPoints<T, kHexagonPoints>(figure) {
         }
 
         Hexagon(Hexagon && figure) noexcept {
             auto copy = Hexagon(figure);
-            Figure<T>::points = std::move(copy.points);
+            FigureOnPoints<T, kHexagonPoints>::points = std::move(copy.points);
         }
 
         Hexagon &operator=(const Hexagon & other) {
             auto copy = Hexagon(other);
-            Figure<T>::points = std::move(copy.points);
+            FigureOnPoints<T, kHexagonPoints>::points = std::move(copy.points);
 
             return *this;
         }
 
         Hexagon &operator=(Hexagon && other) noexcept {
-            Figure<T>::points = std::move(other.points);
+            FigureOnPoints<T, kHexagonPoints>::points = std::move(other.points);
 
             return *this;
         }
@@ -80,44 +76,39 @@ namespace Shape {
             std::cout << "Enter a center for Hexagon" << std::endl;
             is >> center;
 
-            figure.points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
-                )
-            );
-            figure.points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+            figure.points[0] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x + 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                    );
+            figure.points[1] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x - 0.5 * length, center.y - (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
 
-                )
-            );
-            figure.points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
-                )
-            );
-            figure.points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
-                )
-            );
-            figure.points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+                    );
+            figure.points[2] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x + 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                    );
+            figure.points[3] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x - 0.5 * length, center.y + (1.0 / std::tan(std::numbers::pi / 6)) * 0.5 * length}
+                    );
+            figure.points[4] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x + (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
 
-                )
-            );
-            figure.points.emplace_back(
-                std::make_unique<Point<T> >(
-                    Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
-                )
-            );
+                    );
+            figure.points[5] =
+                    std::make_unique<Point<T> >(
+                        Point{center.x - (1.0 / std::sin(std::numbers::pi / 6)) * 0.5 * length, center.y}
+                    );
 
             return is;
         }
 
         explicit operator double() const override {
-            const double length = distance(*Figure<T>::points[0], *Figure<T>::points[1]);
+            const double length = distance(*FigureOnPoints<T, kHexagonPoints>::points[0],
+                                           *FigureOnPoints<T, kHexagonPoints>::points[1]);
 
             return 3 * std::numbers::sqrt3 * length * length / 2;
         }

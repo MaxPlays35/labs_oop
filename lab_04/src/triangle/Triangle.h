@@ -3,50 +3,53 @@
 //
 #pragma once
 
-#include "../figure/Figure.h"
+#include "../consts/Consts.h"
+#include "../figureOnPoints/FigureOnPoints.h"
 
 
 namespace Shape {
-    template <Numberic T>
-    class Triangle : public Figure<T> {
+    template<Numberic T>
+    class Triangle : public FigureOnPoints<T, kTrianglePoints> {
     public:
         Triangle() = default;
 
-        Triangle(Point<T> a, Point<T> b, Point<T> c) : Figure<T>{a, b, c} {}
-
-        Triangle(Point<T> center, double length) {
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T>>(Point<double>{
-                    center.x + std::cos(std::numbers::pi / 3.0) * length,
-                    center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }));
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T>>(Point<double>{
-                    center.x - std::cos(std::numbers::pi / 3.0) * length,
-                    center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }));
-            Figure<T>::points.emplace_back(
-                std::make_unique<Point<T>>(Point<double>{
-                    center.x,
-                    center.y + (2.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }));
+        Triangle(Point<T> a, Point<T> b, Point<T> c) : FigureOnPoints<T, kTrianglePoints>({a, b, c}) {
         }
 
-        Triangle(const Triangle & figure) : Figure<T>(figure){}
+        Triangle(Point<T> center, double length) {
+            FigureOnPoints<T, kTrianglePoints>::points[0] =
+                    std::make_unique<Point<T> >(Point<double>{
+                        center.x + std::cos(std::numbers::pi / 3.0) * length,
+                        center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+                    });
+            FigureOnPoints<T, kTrianglePoints>::points[1] =
+                    std::make_unique<Point<T> >(Point<double>{
+                        center.x - std::cos(std::numbers::pi / 3.0) * length,
+                        center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+                    });
+            FigureOnPoints<T, kTrianglePoints>::points[2] =
+                    std::make_unique<Point<T> >(Point<double>{
+                        center.x,
+                        center.y + (2.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+                    });
+        }
+
+        Triangle(const Triangle & figure) : FigureOnPoints<T, kTrianglePoints>(figure) {
+        }
 
         Triangle(Triangle && figure) noexcept {
-            Figure<T>::points = std::move(figure);
+            FigureOnPoints<T, kHexagonPoints>::points = std::move(figure);
         }
 
         Triangle &operator=(const Triangle & other) {
             auto copy = Triangle(other);
-            Figure<T>::points = std::move(copy.points);
+            FigureOnPoints<T, kTrianglePoints>::points = std::move(copy.points);
 
             return *this;
         }
 
         Triangle &operator=(Triangle && other) noexcept {
-            Figure<T>::points = std::move(other.points);
+            FigureOnPoints<T, kTrianglePoints>::points = std::move(other.points);
 
             return *this;
         }
@@ -61,24 +64,25 @@ namespace Shape {
             std::cout << "Enter a center for Triangle:";
             is >> center;
 
-            figure.points.emplace_back(std::make_unique<Point<T>>(Point{
-               center.x + std::cos(std::numbers::pi / 3.0) * length,
-               center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }));
-            figure.points.emplace_back(std::make_unique<Point<T>>(Point{
+            figure.points[0] = std::make_unique<Point<T> >(Point{
+                center.x + std::cos(std::numbers::pi / 3.0) * length,
+                center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
+            });
+            figure.points[1] = std::make_unique<Point<T> >(Point{
                 center.x - std::cos(std::numbers::pi / 3.0) * length,
                 center.y - (1.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }));
-            figure.points.emplace_back(std::make_unique<Point<T>>(Point{
+            });
+            figure.points[2] = std::make_unique<Point<T> >(Point{
                 center.x,
                 center.y + (2.0 / 3.0) * std::sin(std::numbers::pi / 3.0) * length
-                }));
+            });
 
             return is;
         }
 
         explicit operator double() const override {
-            const double length = distance(*Figure<T>::points[0], *Figure<T>::points[1]);
+            const double length = distance(*FigureOnPoints<T, kTrianglePoints>::points[0],
+                                           *FigureOnPoints<T, kTrianglePoints>::points[1]);
 
             return std::numbers::sqrt3 * length * length / 4;
         }
