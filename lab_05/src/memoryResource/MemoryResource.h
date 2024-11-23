@@ -10,16 +10,25 @@
 
 namespace PolymorphicQueue {
     class Block {
+    private:
+        size_t offset_;
+        size_t size_;
     public:
-        size_t offset;
-        size_t size;
 
         Block() = default;
 
-        Block(const size_t offset, const size_t size) : offset(offset), size(size) {}
+        Block(const size_t offset, const size_t size) : offset_(offset), size_(size) {}
 
         bool operator==(const Block & other) const {
-            return offset == other.offset && size == other.size;
+            return offset_ == other.offset_ && size_ == other.size_;
+        }
+
+        size_t getSize() const {
+            return size_;
+        }
+
+        size_t getOffset() const {
+            return offset_;
         }
 
         ~Block() = default;
@@ -38,7 +47,7 @@ namespace PolymorphicQueue {
                     break;
                 }
 
-                prevOffset = key + block.size;
+                prevOffset = key + block.getSize();
             }
 
             if (prevOffset + bytes >= max_size) {
