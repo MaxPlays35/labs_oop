@@ -15,8 +15,9 @@ std::shared_ptr<IObserver> TextObserver::get() {
 void TextObserver::onFight(std::shared_ptr<Npc> attacker, std::shared_ptr<Npc> defender, bool win) {
     if (win) {
         std::cout << "Somebody killed" << std::endl;
-
+        std::cout << "Attacker:" << std::endl;
         attacker->print();
+        std::cout << "Defender:" << std::endl;
         defender->print();
     }
 }

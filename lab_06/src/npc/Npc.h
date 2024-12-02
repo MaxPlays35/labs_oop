@@ -8,9 +8,12 @@
 #include "../consts/consts.h"
 
 class IObserver;
+class Orc;
+class Squirrel;
+class Bear;
 
-class Npc : std::enable_shared_from_this<Npc>{
-private:
+class Npc : public std::enable_shared_from_this<Npc>{
+protected:
     NpcType type_;
     std::string name_;
     bool isAlive_ = true;
@@ -19,22 +22,37 @@ private:
     std::vector<std::shared_ptr<IObserver>> observers_;
 
 public:
-    Npc() = default;
-
     Npc(NpcType type, std::string name, bool isAlive, int x, int y);
 
-    Npc(const Npc & other);
+    Npc(NpcType type, std::istream & is);
 
-    Npc(Npc && other) noexcept;
+    Npc(const Npc & other) = default;
+
+    Npc(Npc && other) noexcept = default;
 
     void subscribe(std::shared_ptr<IObserver> observer);
 
-    void fightNotify(std::shared_ptr<Npc> defender, bool win);
+    void fightNotify(const std::shared_ptr<Npc> defender, bool win);
 
-    // virtual bool
+    bool isClose(std::shared_ptr<Npc> other, std::size_t distance) const;
+
+    void kill();
+
+    bool isAlive() const;
+
+    virtual bool accept(std::shared_ptr<Npc> visitor) = 0;
+
+    virtual bool fight(std::shared_ptr<Orc> other) = 0;
+
+    virtual bool fight(std::shared_ptr<Squirrel> other) = 0;
+
+    virtual bool fight(std::shared_ptr<Bear> other) = 0;
 
     virtual void print() = 0;
 
+    virtual void save(std::ostream & os);
 
-    ~Npc() = default;
+    virtual bool operator==(const Npc & other) const;
+
+    virtual ~Npc() = default;
 };

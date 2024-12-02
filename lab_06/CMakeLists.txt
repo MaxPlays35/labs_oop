@@ -8,7 +8,13 @@ add_library(${PROJECT_NAME}_lib
             src/npc/Npc.h src/npc/Npc.cpp
             src/consts/consts.h src/consts/consts.cpp
             src/observer/IObserver.h src/observer/IObserver.cpp
-            src/textObserver/TextObserver.h src/textObserver/TextObserver.cpp)
+            src/textObserver/TextObserver.h src/textObserver/TextObserver.cpp
+            src/bear/Bear.h src/bear/Bear.cpp
+            src/orc/Orc.h src/orc/Orc.cpp
+            src/squirrel/Squirrel.h src/squirrel/Squirrel.cpp
+            src/backuper/Backuper.h src/backuper/Backuper.cpp
+            src/generator/Generator.h src/generator/Generator.cpp
+            src/utils/Utils.h src/utils/Utils.cpp)
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)

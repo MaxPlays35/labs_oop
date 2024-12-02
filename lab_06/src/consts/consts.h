@@ -5,12 +5,6 @@
 #include <iostream>
 #include <string>
 
-constexpr std::string test("43242");
-
-void print() {
-    std::cout << test << std::endl;
-}
-
 enum NpcType {
     BadType,
     OrcType,
