@@ -9,16 +9,15 @@
 #include "../bear/Bear.h"
 
 Generator::Generator() {
-    generator_.seed(0);
 }
 
-std::vector<std::shared_ptr<Npc>> Generator::generateNpcies(std::size_t size) {
+std::vector<std::shared_ptr<Npc>> Generator::generateNpcies(std::size_t size, std::size_t xMax, std::size_t yMax) {
     std::vector<std::shared_ptr<Npc>> npcies;
 
     for (std::size_t i = 0; i < size; ++i) {
-        auto type = generator_() % 3 + 1;
-        auto x = generator_() % 100;
-        auto y = generator_() % 100;
+        auto type = generator_.generateInt(1, 3);
+        auto x = generator_.generateInt(0, xMax - 1);
+        auto y = generator_.generateInt(0, yMax - 1);
         std::string name;
 
         switch (type) {

@@ -12,7 +12,7 @@
 int main() {
     auto gen = Generator();
 
-    auto val = gen.generate_npcies(100);
+    auto val = gen.generateNpcies(100);
 
     auto bk = Backuper("test1.txt", "test2.txt");
 

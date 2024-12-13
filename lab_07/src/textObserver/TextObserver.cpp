@@ -1,0 +1,26 @@
+//
+// Created by MaxPlays on 29/11/2024.
+//
+
+#include "TextObserver.h"
+
+#include <iostream>
+
+#include "../printer/Printer.h"
+
+std::shared_ptr<IObserver> TextObserver::get() {
+    static TextObserver instance;
+
+    return std::shared_ptr<IObserver>(&instance, [](IObserver* observer) {});
+}
+
+void TextObserver::onFight(std::shared_ptr<Npc> attacker, std::shared_ptr<Npc> defender, bool win) {
+    if (win) {
+        printer << "Somebody killed" << std::endl;
+        printer << "Attacker:" << std::endl;
+        attacker->print();
+        printer << "Defender:" << std::endl;
+        defender->print();
+    }
+}
+
