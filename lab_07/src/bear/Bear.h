@@ -20,7 +20,7 @@ public:
 
     bool fight(std::shared_ptr<Orc> other) override;
 
-    void print() override;
+    void print(std::stringstream & stream) override;
 
     void save(std::ostream &os) override;
 

@@ -20,7 +20,7 @@ public:
 
     std::vector<std::shared_ptr<Npc>> & getNpcies();
 
-    std::vector<std::vector<char>> getField();
+    std::vector<std::vector<char>> getField() const;
 
     Coroutine move();
 

@@ -5,6 +5,7 @@
 #include "TextObserver.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../printer/Printer.h"
 
@@ -16,11 +17,13 @@ std::shared_ptr<IObserver> TextObserver::get() {
 
 void TextObserver::onFight(std::shared_ptr<Npc> attacker, std::shared_ptr<Npc> defender, bool win) {
     if (win) {
-        printer << "Somebody killed" << std::endl;
-        printer << "Attacker:" << std::endl;
-        attacker->print();
-        printer << "Defender:" << std::endl;
-        defender->print();
+        std::stringstream stream;
+        stream << "Somebody killed" << std::endl;
+        stream << "Attacker:" << std::endl;
+        attacker->print(stream);
+        stream << "Defender:" << std::endl;
+        defender->print(stream);
+        printer << stream.str();
     }
 }
 

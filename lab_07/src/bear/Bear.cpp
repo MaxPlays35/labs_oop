@@ -5,6 +5,7 @@
 #include "Bear.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../printer/Printer.h"
 
@@ -34,8 +35,8 @@ bool Bear::fight(std::shared_ptr<Orc> other) {
     return false;
 }
 
-void Bear::print() {
-    printer << "Bear(" <<  name_ << ", " <<  isAlive_ << ", " << x_ << ", " << y_ << ')' << std::endl;
+void Bear::print(std::stringstream & stream) {
+    stream << "Bear(" <<  name_ << ", " <<  isAlive_ << ", " << x_ << ", " << y_ << ')' << std::endl;
 }
 
 void Bear::save(std::ostream &os) {

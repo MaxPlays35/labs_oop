@@ -53,7 +53,7 @@ public:
 
     virtual bool fight(std::shared_ptr<Bear> other) = 0;
 
-    virtual void print() = 0;
+    virtual void print(std::stringstream & stream) = 0;
 
     virtual void save(std::ostream & os);
 

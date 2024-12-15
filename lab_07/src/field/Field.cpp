@@ -22,11 +22,16 @@ std::vector<std::shared_ptr<Npc> > &Field::getNpcies() {
     return npcies_;
 }
 
-std::vector<std::vector<char> > Field::getField() {
+std::vector<std::vector<char> > Field::getField() const {
     std::vector field(sizeY_, std::vector<char>(sizeX_, ' '));
 
     for (const auto & npc: npcies_) {
         auto [x, y] = npc->position();
+
+        if (!npc->isAlive()) {
+            field[y][x] = 'x';
+            continue;
+        }
 
         switch (npc->getType()) {
             case SquirrelType:
@@ -48,7 +53,7 @@ std::vector<std::vector<char> > Field::getField() {
 
 Coroutine Field::move() {
     while (true) {
-        for (const auto & npc: npcies_) {
+        for (auto & npc: npcies_) {
             if (!npc->isAlive()) {
                 continue;
             }
@@ -60,21 +65,21 @@ Coroutine Field::move() {
                 case OrcType:
                     dx = generator_.generateInt(-20, 20);
                     dy = generator_.generateInt(std::abs(dx) - 20, 20 - std::abs(dx));
-                    if (x + dx < sizeX_ and x + dx >= 0 and y + dx >= 0 and y + dx < sizeY_) {
+                    if (x + dx < sizeX_ and x + dx >= 0 and y + dy >= 0 and y + dy < sizeY_) {
                         npc->move(x + dx, y + dy);
                     }
                     break;
                 case SquirrelType:
                     dx = generator_.generateInt(-5, 5);
                     dy = generator_.generateInt(std::abs(dx) - 5, 5 - std::abs(dx));
-                    if (x + dx < sizeX_ and x + dx >= 0 and y + dx >= 0 and y + dx < sizeY_) {
+                    if (x + dx < sizeX_ and x + dx >= 0 and y + dy >= 0 and y + dy < sizeY_) {
                         npc->move(x + dx, y + dy);
                     }
                     break;
                 case BearType:
                     dx = generator_.generateInt(-5, 5);
                     dy = generator_.generateInt(std::abs(dx) - 5, 5 - std::abs(dx));
-                    if (x + dx < sizeX_ and x + dx >= 0 and y + dx >= 0 and y + dx < sizeY_) {
+                    if (x + dx < sizeX_ and x + dx >= 0 and y + dy >= 0 and y + dy < sizeY_) {
                         npc->move(x + dx, y + dy);
                     }
                     break;
@@ -114,17 +119,20 @@ void Field::start(std::size_t seconds) {
         while (std::chrono::steady_clock::now() - start < duration_limit){
             moveCor.resume();
             fightCor.resume();
+            std::this_thread::sleep_for(500ms);
         }
     });
 
     while (std::chrono::steady_clock::now() - start < duration_limit){
         auto state = getField();
+        std::stringstream stream;
         for (const auto & line : state) {
             for (const auto & ch : line) {
-                printer << '[' << ch << ']';
+                stream << '[' << ch << ']';
             }
-            printer << std::endl;
+            stream << std::endl;
         }
+        printer << stream.str();
         std::this_thread::sleep_for(1s);
     }
 }

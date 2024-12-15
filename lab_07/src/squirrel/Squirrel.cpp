@@ -5,6 +5,7 @@
 #include "Squirrel.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../bear/Bear.h"
 #include "../orc/Orc.h"
@@ -35,8 +36,8 @@ bool Squirrel::fight(std::shared_ptr<Orc> other) {
     return false;
 }
 
-void Squirrel::print() {
-    printer << "Squirrel(" <<  name_ << ", " <<  isAlive_ << ", " << x_ << ", " << y_ << ')' << std::endl;
+void Squirrel::print(std::stringstream & stream) {
+    stream << "Squirrel(" <<  name_ << ", " <<  isAlive_ << ", " << x_ << ", " << y_ << ')' << std::endl;
 }
 
 void Squirrel::save(std::ostream &os) {
